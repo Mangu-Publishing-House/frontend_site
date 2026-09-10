@@ -1,0 +1,41 @@
+name: Story
+description: A slice of a Feature with testable acceptance criteria.
+title: "[STORY] "
+labels: ["type:story"]
+type: Task
+body:
+  - type: input
+    id: parent
+    attributes:
+      label: Parent Feature
+      description: "416 workflow · 417 revamp · 418 COO · 419 agents · 420 commerce"
+      placeholder: "416"
+    validations:
+      required: true
+  - type: textarea
+    id: story
+    attributes:
+      label: Story
+      placeholder: As a … I want … so that …
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance
+      value: |
+        - [ ] 
+        - [ ] Implementation stays off main during freeze unless docs/CI/security
+    validations:
+      required: true
+  - type: dropdown
+    id: agent
+    attributes:
+      label: Preferred agent
+      options:
+        - none
+        - plan
+        - task
+        - coo-ops
+        - backlog-steward
+        - GitHub Copilot coding agent

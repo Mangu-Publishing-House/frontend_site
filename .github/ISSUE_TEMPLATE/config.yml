@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Delivery workflow
+    url: https://github.com/Mangu-Publishing-House/my_publishing/blob/main/docs/WORKFLOW.md
+    about: How Features, Stories, Azure DevOps, and agents are supposed to work.
+  - name: Launch freeze
+    url: https://github.com/Mangu-Publishing-House/my_publishing/issues/209
+    about: Do not merge revamp code until G1–G13 are TRUE.

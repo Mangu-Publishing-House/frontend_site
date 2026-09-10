@@ -1,0 +1,35 @@
+name: COO
+description: Publishing-house operating work (pipeline, authors, money, cadence).
+title: "[COO] "
+labels: ["type:coo", "type:story"]
+type: Task
+body:
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Pipeline stage
+      options:
+        - Intake
+        - Contract
+        - Production
+        - Metadata
+        - Live
+        - Payout
+        - Cadence / exception
+    validations:
+      required: true
+  - type: textarea
+    id: story
+    attributes:
+      label: What the house needs
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance
+      value: |
+        - [ ] Maps to an existing route or table, or files the gap
+        - [ ] Does not duplicate #205 purchase path
+    validations:
+      required: true
