@@ -1,0 +1,37 @@
+name: Agent
+description: Work for a house agent or GitHub Copilot.
+title: "[AGENT] "
+labels: ["type:agent", "type:story"]
+type: Task
+body:
+  - type: dropdown
+    id: agent
+    attributes:
+      label: Agent
+      options:
+        - explore
+        - plan
+        - task
+        - research
+        - code-review
+        - merge-steward
+        - my-agent
+        - coo-ops
+        - backlog-steward
+        - GitHub Copilot coding agent
+    validations:
+      required: true
+  - type: textarea
+    id: job
+    attributes:
+      label: Job
+      description: One PR. No duplicates. No freeze violations.
+    validations:
+      required: true
+  - type: input
+    id: parent
+    attributes:
+      label: Parent Feature or Story number
+      placeholder: "419"
+    validations:
+      required: true

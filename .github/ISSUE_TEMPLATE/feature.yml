@@ -1,0 +1,45 @@
+name: Feature
+description: A shipable capability that will own child Stories.
+title: "[FEATURE] "
+labels: ["type:feature", "enhancement"]
+type: Feature
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / opportunity
+      placeholder: Who is blocked and what is missing.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      placeholder: In and out of scope.
+    validations:
+      required: true
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Phase
+      options:
+        - phase:workflow
+        - phase:revamp
+        - phase:post-go
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance
+      value: |
+        - [ ] Child stories filed and parented
+        - [ ] Does not fork an existing P0 (check #205 / #420 for commerce)
+    validations:
+      required: true
+  - type: input
+    id: parent
+    attributes:
+      label: Parent epic
+      description: Usually #415.
+      placeholder: "415"
