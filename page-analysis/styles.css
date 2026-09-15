@@ -1,0 +1,58 @@
+:root {
+  --bg: #0b0d16;
+  --bg2: #121526;
+  --panel: #171a2c;
+  --line: #2a2f4a;
+  --gold: #ffd166;
+  --gold2: #e09a2b;
+  --text: #f4f1ea;
+  --muted: #9aa3c2;
+  --ok: #4ade80;
+  --warn: #fbbf24;
+  --off: #f87171;
+  --flag: #60a5fa;
+  --auth: #c4b5fd;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font: 15px/1.5 ui-sans-serif, system-ui, sans-serif; }
+a { color: var(--gold); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.app { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+.side { background: var(--bg2); border-right: 1px solid var(--line); overflow: auto; position: sticky; top: 0; height: 100vh; }
+.side h1 { font-size: 13px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin: 20px 16px 8px; }
+.side .meta { margin: 0 16px 16px; color: var(--muted); font-size: 12px; }
+.search { margin: 0 12px 12px; width: calc(100% - 24px); background: #0d1020; border: 1px solid var(--line); color: var(--text); padding: 8px 10px; border-radius: 8px; }
+.group { margin: 0 0 10px; }
+.group h2 { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 14px 16px 6px; }
+.nav a { display: block; padding: 7px 16px; color: var(--text); border-left: 3px solid transparent; font-size: 13px; }
+.nav a:hover { background: #1d2238; text-decoration: none; }
+.nav a.active { background: #222844; border-left-color: var(--gold); color: var(--gold); }
+.nav .badge { float: right; font-size: 10px; color: var(--muted); }
+.main { padding: 28px 36px 80px; max-width: 1100px; }
+.crumb { color: var(--muted); font-size: 12px; margin-bottom: 8px; }
+h.page-title, .page-title { font-size: 28px; font-weight: 650; margin: 0 0 6px; }
+.route { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--gold); font-size: 14px; }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 20px; }
+.pill { font-size: 11px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.pill.live { color: var(--ok); border-color: #166534; }
+.pill.off { color: var(--off); border-color: #7f1d1d; }
+.pill.flag { color: var(--flag); border-color: #1e3a8a; }
+.pill.auth { color: var(--auth); border-color: #5b21b6; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 900px) { .app { grid-template-columns: 1fr; } .side { height: auto; position: relative; } .grid { grid-template-columns: 1fr; } }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; margin-bottom: 16px; }
+.card h3 { margin: 0 0 10px; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: var(--gold2); }
+.wire { background: #0c0f1c; border: 1px dashed #3a4166; border-radius: 10px; padding: 14px; min-height: 160px; }
+.wire .row { display: flex; gap: 10px; margin-bottom: 10px; }
+.block { background: #1b2040; border-radius: 8px; padding: 10px 12px; color: #c9d0ef; font-size: 12px; }
+.block.hero { min-height: 72px; background: linear-gradient(135deg, #1a1a2e, #533483); color: #ffe7a3; }
+.block.cta { background: #2a2108; color: var(--gold); }
+ul.feats { margin: 0; padding-left: 18px; }
+ul.feats li { margin: 4px 0; }
+label.feat { display: flex; gap: 8px; align-items: flex-start; margin: 6px 0; font-size: 13px; }
+textarea.notes { width: 100%; min-height: 90px; background: #0d1020; color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
+.src { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--muted); }
+.home-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.home-grid a.tile { display: block; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; color: var(--text); }
+.home-grid a.tile:hover { border-color: var(--gold); text-decoration: none; }
+.tile .r { font-family: ui-monospace, Menlo, monospace; color: var(--gold); font-size: 12px; }
