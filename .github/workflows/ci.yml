@@ -42,28 +42,30 @@ jobs:
       # violates that contract. The step below is the non-production, mock-aware
       # shape check, so env regressions CI *can* catch still fail here.
       - run: npm run validate-env
-      - run: npm run build
-      # PERF-PHASE3-3 — Bundle budget gate. Fails if the main JS chunk exceeds
-      # 150 KB gzip. Reads the .next/analyze/client.html manifest via --json.
-      # Uses Next.js build output (pages-manifest + build manifest) to find the
-      # largest shared chunk and check its size.
-      - name: Bundle budget check (< 150 KB gzip on main chunk)
+      # PERF-PHASE3-3 — save build output so the budget gate can parse it.
+      - name: Build
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee /tmp/build.log
+      # PERF-PHASE3-3 — Bundle budget gate. Checks "First Load JS shared by all"
+      # from Next.js build output (not individual chunk files, which include large
+      # page-specific lazy chunks like recharts). Budget: 150 kB.
+      - name: Bundle budget check (First Load JS shared by all < 150 kB)
         run: |
           set -e
-          # Find largest .js file in .next/static/chunks that is not a page chunk
-          LARGEST=$(find .next/static/chunks -name "*.js" -not -name "page-*.js" \
-            | xargs du -b 2>/dev/null | sort -rn | head -1 | awk '{print $2}')
-          if [ -z "$LARGEST" ]; then
-            echo "No chunks found — skipping budget check"
+          SHARED_LINE=$(grep "First Load JS shared by all" /tmp/build.log | tail -1)
+          if [ -z "$SHARED_LINE" ]; then
+            echo "Could not find 'First Load JS shared by all' in build output — skipping"
             exit 0
           fi
-          SIZE_BYTES=$(wc -c < "$LARGEST")
-          BUDGET_BYTES=153600  # 150 KB
-          echo "Largest shared chunk: $LARGEST (${SIZE_BYTES} bytes raw)"
+          SIZE_KB=$(echo "$SHARED_LINE" | grep -oE '[0-9]+\.?[0-9]* kB' | head -1 | sed 's/ kB//')
+          SIZE_BYTES=$(awk "BEGIN{printf \"%d\", $SIZE_KB * 1024}")
+          BUDGET_BYTES=153600  # 150 kB
+          echo "First Load JS shared by all: ${SIZE_KB} kB (~${SIZE_BYTES} bytes)"
           if [ "$SIZE_BYTES" -gt "$BUDGET_BYTES" ]; then
-            echo "FAIL: chunk exceeds 150 KB budget (${SIZE_BYTES} > ${BUDGET_BYTES})"
+            echo "FAIL: shared bundle exceeds 150 kB budget (${SIZE_KB} kB > 150 kB)"
             echo "Run ANALYZE=true npm run build locally to investigate."
             exit 1
           else
-            echo "OK: chunk within 150 KB budget"
+            echo "OK: shared bundle within 150 kB budget"
           fi
