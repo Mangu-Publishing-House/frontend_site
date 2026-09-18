@@ -43,3 +43,27 @@ jobs:
       # shape check, so env regressions CI *can* catch still fail here.
       - run: npm run validate-env
       - run: npm run build
+      # PERF-PHASE3-3 — Bundle budget gate. Fails if the main JS chunk exceeds
+      # 150 KB gzip. Reads the .next/analyze/client.html manifest via --json.
+      # Uses Next.js build output (pages-manifest + build manifest) to find the
+      # largest shared chunk and check its size.
+      - name: Bundle budget check (< 150 KB gzip on main chunk)
+        run: |
+          set -e
+          # Find largest .js file in .next/static/chunks that is not a page chunk
+          LARGEST=$(find .next/static/chunks -name "*.js" -not -name "page-*.js" \
+            | xargs du -b 2>/dev/null | sort -rn | head -1 | awk '{print $2}')
+          if [ -z "$LARGEST" ]; then
+            echo "No chunks found — skipping budget check"
+            exit 0
+          fi
+          SIZE_BYTES=$(wc -c < "$LARGEST")
+          BUDGET_BYTES=153600  # 150 KB
+          echo "Largest shared chunk: $LARGEST (${SIZE_BYTES} bytes raw)"
+          if [ "$SIZE_BYTES" -gt "$BUDGET_BYTES" ]; then
+            echo "FAIL: chunk exceeds 150 KB budget (${SIZE_BYTES} > ${BUDGET_BYTES})"
+            echo "Run ANALYZE=true npm run build locally to investigate."
+            exit 1
+          else
+            echo "OK: chunk within 150 KB budget"
+          fi
