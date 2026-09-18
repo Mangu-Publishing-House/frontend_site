@@ -66,7 +66,8 @@ Fix: convert FooterLink hover to CSS transitions instead of `motion.div`.
 
 - Runbook: `RUNBOOKS/copilot-studio.md`
 - Human must: provision Copilot Studio bot, set `COPILOT_DIRECT_LINE_SECRET` in Vercel
-- Code to write: `/api/copilot/token/route.ts` token endpoint + author portal embed page
+- ✅ Code done: `app/api/copilot/token/route.ts` token endpoint (returns 503 until secret set)
+- Still to write: author portal embed page at `app/dashboard/author/copilot/page.tsx`
 - See MSFT-INTEGRATION.md item 1
 
 ### 4. Power Automate Flows (HUMAN GATE)
