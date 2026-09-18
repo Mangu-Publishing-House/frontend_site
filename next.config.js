@@ -100,6 +100,17 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '1mb', // PERF-PHASE2-9 — Tighten from 50mb to 1mb
     },
+    // PERF-PHASE3-1 — Tree-shake icon + animation + chart libraries so only
+    // the symbols actually imported end up in the client bundle.
+    optimizePackageImports: [
+      'lucide-react',
+      'framer-motion',
+      'recharts',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-dropdown-menu',
+      '@radix-ui/react-tabs',
+      '@radix-ui/react-select',
+    ],
   },
 };
 
