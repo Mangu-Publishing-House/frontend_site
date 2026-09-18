@@ -42,4 +42,30 @@ jobs:
       # violates that contract. The step below is the non-production, mock-aware
       # shape check, so env regressions CI *can* catch still fail here.
       - run: npm run validate-env
-      - run: npm run build
+      # PERF-PHASE3-3 — save build output so the budget gate can parse it.
+      - name: Build
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee /tmp/build.log
+      # PERF-PHASE3-3 — Bundle budget gate. Checks "First Load JS shared by all"
+      # from Next.js build output (not individual chunk files, which include large
+      # page-specific lazy chunks like recharts). Budget: 150 kB.
+      - name: Bundle budget check (First Load JS shared by all < 150 kB)
+        run: |
+          set -e
+          SHARED_LINE=$(grep "First Load JS shared by all" /tmp/build.log | tail -1)
+          if [ -z "$SHARED_LINE" ]; then
+            echo "Could not find 'First Load JS shared by all' in build output — skipping"
+            exit 0
+          fi
+          SIZE_KB=$(echo "$SHARED_LINE" | grep -oE '[0-9]+\.?[0-9]* kB' | head -1 | sed 's/ kB//')
+          SIZE_BYTES=$(awk "BEGIN{printf \"%d\", $SIZE_KB * 1024}")
+          BUDGET_BYTES=153600  # 150 kB
+          echo "First Load JS shared by all: ${SIZE_KB} kB (~${SIZE_BYTES} bytes)"
+          if [ "$SIZE_BYTES" -gt "$BUDGET_BYTES" ]; then
+            echo "FAIL: shared bundle exceeds 150 kB budget (${SIZE_KB} kB > 150 kB)"
+            echo "Run ANALYZE=true npm run build locally to investigate."
+            exit 1
+          else
+            echo "OK: shared bundle within 150 kB budget"
+          fi
