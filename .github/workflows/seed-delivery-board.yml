@@ -16,7 +16,7 @@ jobs:
   seed:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Explain token limits
         run: |
           echo "GITHUB_TOKEN in Actions usually cannot create org Projects v2."
